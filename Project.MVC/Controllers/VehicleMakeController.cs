@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Project.Service;
 using Project.Service.Models;
+using Project.Service.Services;
 
 namespace Project.MVC.Controllers
 {
@@ -14,24 +15,78 @@ namespace Project.MVC.Controllers
     {
         private readonly MyContext _context;
 
-        public VehicleMakeController(MyContext context)
+        public IVehicleMakeService VehicleMakeService { get; set; }
+        public IVehicleModelService VehicleModelService { get; set; }
+
+
+        public VehicleMakeController(MyContext context, IVehicleMakeService vehicleMakeService)
         {
+            VehicleMakeService = vehicleMakeService;
+
             _context = context;
         }
 
         // GET: VehicleMake
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(
+        string sortOrder,
+        string currentFilter,
+        string searchString,
+        int? pageNumber)
         {
-            var vehicleMake = from m in _context.VehicleMakes
-                         select m;
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["Name"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["Abrv"] = sortOrder == "Date" ? "date_desc" : "Date";
 
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var vehicleMake = from s in _context.VehicleMakes
+                              select s;
             if (!String.IsNullOrEmpty(searchString))
             {
                 vehicleMake = vehicleMake.Where(s => s.Name.Contains(searchString));
             }
-
-            return View(await vehicleMake.ToListAsync());
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    vehicleMake = vehicleMake.OrderByDescending(s => s.Name);
+                    break;
+                case "Date":
+                    vehicleMake = vehicleMake.OrderBy(s => s.Abrv);
+                    break;
+                case "date_desc":
+                    vehicleMake = vehicleMake.OrderByDescending(s => s.Name);
+                    break;
+                default:
+                    vehicleMake = vehicleMake.OrderBy(s => s.Abrv);
+                    break;
+            }
+            int pageSize = 3;
+            return View(await PaginatedList<VehicleMake>.CreateAsync(vehicleMake.AsNoTracking(), pageNumber ?? 1, pageSize));
+            //return View(await vehicleMake.AsNoTracking().ToListAsync());
         }
+
+        //public async Task<IActionResult> Index(string searchString)
+        //{
+        //    var vehicleMake = from m in _context.VehicleMakes
+        //                      select m;
+
+        //    if (!String.IsNullOrEmpty(searchString))
+        //    {
+        //        vehicleMake = vehicleMake.Where(s => s.Name.Contains(searchString));
+        //    }
+
+        //    return View(await vehicleMake.ToListAsync());
+        //}
+
 
         // GET: VehicleMake/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -62,12 +117,12 @@ namespace Project.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Abrv")] VehicleMake vehicleMake)
+        public async Task<IActionResult> Create([Bind("Id,Name,Abrv")] VehicleMake vehicleMake) // <-   UI
         {
+            //is valid 
             if (ModelState.IsValid)
             {
-                _context.Add(vehicleMake);
-                await _context.SaveChangesAsync();
+                await VehicleMakeService.CreateVehicleMake(vehicleMake);
                 return RedirectToAction(nameof(Index));
             }
             return View(vehicleMake);
@@ -103,22 +158,7 @@ namespace Project.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(vehicleMake);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!VehicleMakeExists(vehicleMake.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await VehicleMakeService.EditVehicleMake(id, vehicleMake);
                 return RedirectToAction(nameof(Index));
             }
             return View(vehicleMake);
@@ -142,14 +182,13 @@ namespace Project.MVC.Controllers
             return View(vehicleMake);
         }
 
-        // POST: VehicleMake/Delete/5
+        //POST: VehicleMake/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var vehicleMake = await _context.VehicleMakes.FindAsync(id);
-            _context.VehicleMakes.Remove(vehicleMake);
-            await _context.SaveChangesAsync();
+
+            await VehicleMakeService.DeleteVehicleMake(id);
             return RedirectToAction(nameof(Index));
         }
 
@@ -157,5 +196,6 @@ namespace Project.MVC.Controllers
         {
             return _context.VehicleMakes.Any(e => e.Id == id);
         }
+
     }
 }

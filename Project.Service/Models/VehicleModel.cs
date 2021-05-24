@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Project.Service.Models
 {
-    public class VehicleModel
+    public class VehicleModel : IVehicleModel
     {
         [Key]
         public int Id { get; set; }
@@ -19,7 +19,7 @@ namespace Project.Service.Models
         [Column("Abrv")]
         public string Abrv { get; set; }
 
-
+        
         public int MakeId { get; set; }
         [ForeignKey("MakeId")]
 

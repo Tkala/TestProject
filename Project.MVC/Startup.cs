@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Project.Service;
 using Project.Service.Models;
+using Project.Service.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,11 @@ namespace Project.MVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<IVehicleMakeService, VehicleMakeService>();
+            services.AddScoped<IVehicleModelService, VehicleModelService>();
+            services.AddScoped<IVehicleMake, VehicleMake>();
+            services.AddScoped<IVehicleModel, VehicleModel>();
+
             services.AddDbContext<MyContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));

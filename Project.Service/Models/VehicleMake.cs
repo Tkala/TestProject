@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Project.Service.Models
 {
-    public class VehicleMake
+    public class VehicleMake : IVehicleMake
     {
         [Key]
         public int Id { get; set; }
@@ -19,6 +19,6 @@ namespace Project.Service.Models
         [Column("Abrv")]
         public string Abrv { get; set; }
 
-        public VehicleModel VehicleModel { get; set; }
+        public ICollection<VehicleModel> VehicleModels { get; set; }
     }
 }
