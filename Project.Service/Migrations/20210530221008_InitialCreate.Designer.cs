@@ -9,15 +9,15 @@ using Project.Service;
 namespace Project.Service.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20210513102000_InitalCreate")]
-    partial class InitalCreate
+    [Migration("20210530221008_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Project.Service.Models.VehicleMake", b =>
@@ -60,8 +60,7 @@ namespace Project.Service.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MakeId")
-                        .IsUnique();
+                    b.HasIndex("MakeId");
 
                     b.ToTable("VehicleModels");
                 });
@@ -69,8 +68,8 @@ namespace Project.Service.Migrations
             modelBuilder.Entity("Project.Service.Models.VehicleModel", b =>
                 {
                     b.HasOne("Project.Service.Models.VehicleMake", "VehicleMake")
-                        .WithOne("VehicleModel")
-                        .HasForeignKey("Project.Service.Models.VehicleModel", "MakeId")
+                        .WithMany("VehicleModels")
+                        .HasForeignKey("MakeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -79,7 +78,7 @@ namespace Project.Service.Migrations
 
             modelBuilder.Entity("Project.Service.Models.VehicleMake", b =>
                 {
-                    b.Navigation("VehicleModel");
+                    b.Navigation("VehicleModels");
                 });
 #pragma warning restore 612, 618
         }

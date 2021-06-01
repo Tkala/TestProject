@@ -32,7 +32,7 @@ namespace Project.MVC
             services.AddScoped<IVehicleModelService, VehicleModelService>();
             services.AddScoped<IVehicleMake, VehicleMake>();
             services.AddScoped<IVehicleModel, VehicleModel>();
-
+            services.AddAutoMapper(typeof(Startup));
             services.AddDbContext<MyContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));

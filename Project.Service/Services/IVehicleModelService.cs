@@ -9,8 +9,11 @@ namespace Project.Service.Services
 {
     public interface IVehicleModelService
     {
-        Task CreateVehicleModel(VehicleModel vehicleModel);
-        Task EditVehicleModel(int id, VehicleModel vehicleModel);
-        Task DeleteVehicleModel(int id);
+        Task CreateVehicleModelAsync(VehicleModel vehicleModel);
+        Task EditVehicleModelAsync(int id, VehicleModel vehicleModel);
+        Task DeleteVehicleModelAsync(int id);
+        Task<PaginatedList<VehicleModel>> VehicleModelPagingAsync(string sortOrder, string currentFilter, string searchString, int? pageNumber);
+        Task<VehicleModel> FindVehicleModelAsync(int? id);
+        //Task<List<VehicleModel>> GetVehicleModelsAsync();
     }
 }

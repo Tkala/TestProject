@@ -20,5 +20,8 @@ namespace Project.Service.Models
         public string Abrv { get; set; }
 
         public ICollection<VehicleModel> VehicleModels { get; set; }
+
+        //public VehicleModel VehicleModel { get; set; }
     }
+
 }

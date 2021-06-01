@@ -2,7 +2,7 @@
 
 namespace Project.Service.Migrations
 {
-    public partial class InitalCreate : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,8 +44,7 @@ namespace Project.Service.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_VehicleModels_MakeId",
                 table: "VehicleModels",
-                column: "MakeId",
-                unique: true);
+                column: "MakeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
