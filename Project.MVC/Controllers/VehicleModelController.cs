@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Project.MVC.Models;
 using Project.Service;
 using Project.Service.Models;
 using Project.Service.Services;
@@ -36,7 +38,7 @@ namespace Project.MVC.Controllers
         int? pageNumber)
         {
 
-            //PaginatedList p = service.Paging(sortOrder, currentFilter, searchString, pageNumber);
+            
             ViewData["CurrentSort"] = sortOrder;
             ViewData["Name"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["Abrv"] = sortOrder == "Date" ? "date_desc" : "Date";
@@ -52,9 +54,7 @@ namespace Project.MVC.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-
-            PaginatedList<VehicleModel> paging = await VehicleModelService.VehicleModelPagingAsync(sortOrder, currentFilter, searchString, pageNumber);
-
+            PaginatedList<Project.Service.Models.VehicleModel> paging = await VehicleModelService.VehicleModelPagingAsync(sortOrder, currentFilter, searchString, pageNumber);
             return View(paging);
 
         }
@@ -80,10 +80,23 @@ namespace Project.MVC.Controllers
         // GET: VehicleModel/Create
         public async Task<IActionResult> CreateAsync()
         {
+            CreateVehicleModel createVehicleModel = new CreateVehicleModel();
             List<SelectListItem> selectListItems = new List<SelectListItem>();
-            List<VehicleMake> vehicleMakes = await VehicleMakeService.GetVehicleMakesAsync();
+            List<Project.Service.Models.VehicleMake> vehicleMakes = await VehicleMakeService.GetVehicleMakesAsync();
             foreach (var vehicleMake in vehicleMakes)
             {
+
+                
+            }
+            List<Project.MVC.Models.VehicleMake> mappedVehicleMakes = Mapper.Map<List<Project.Service.Models.VehicleMake>, List<Project.MVC.Models.VehicleMake>>(vehicleMakes);
+            foreach (var vehicleMake in mappedVehicleMakes)
+            {
+
+            }
+
+            foreach (var vehicleMake in vehicleMakes)
+            {
+
                 var selectListItem = new SelectListItem
                 {
                     Value = vehicleMake.Id.ToString(),
@@ -91,8 +104,13 @@ namespace Project.MVC.Controllers
                 };
                 selectListItems.Add(selectListItem);
             }
-            ViewBag.MakeId = selectListItems;
-            return View();
+            createVehicleModel.VehicleMakes = selectListItems;
+            foreach (var vehicleMake in createVehicleModel.VehicleMakes)
+            {
+
+            }
+
+            return View(createVehicleModel);
         }
 
         // POST: VehicleMake/Create

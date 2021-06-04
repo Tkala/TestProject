@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Project.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace Project.MVC.Profiles
 
             CreateMap<Project.MVC.Models.VehicleModel, Project.Service.Models.VehicleModel>();
             CreateMap<Project.Service.Models.VehicleModel, Project.MVC.Models.VehicleModel>();
+
 
         }
     }

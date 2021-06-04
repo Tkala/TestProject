@@ -21,7 +21,6 @@ namespace Project.Service.Models
 
         public ICollection<VehicleModel> VehicleModels { get; set; }
 
-        //public VehicleModel VehicleModel { get; set; }
     }
 
 }

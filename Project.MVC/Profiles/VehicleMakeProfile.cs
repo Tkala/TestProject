@@ -16,6 +16,9 @@ namespace Project.MVC.Profiles
             CreateMap<Project.MVC.Models.VehicleMake, Project.Service.Models.VehicleMake>();
             CreateMap<Project.Service.Models.VehicleMake, Project.MVC.Models.VehicleMake>();
 
+            CreateMap<List<Project.MVC.Models.VehicleMake>, List<Project.Service.Models.VehicleMake>>();
+            CreateMap<List<Project.Service.Models.VehicleMake>, List<Project.MVC.Models.VehicleMake>>();
+
         }
     }
 }

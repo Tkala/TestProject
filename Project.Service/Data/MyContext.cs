@@ -17,5 +17,6 @@ namespace Project.Service
         {
             optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=VehiclesDB;");
         }
+        //(localdb)\MSSQLLocalDB
     }
 }
