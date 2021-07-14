@@ -54,8 +54,8 @@ namespace Project.MVC.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            PaginatedList<Project.Service.Models.VehicleModel> paging = await VehicleModelService.VehicleModelPagingAsync(sortOrder, currentFilter, searchString, pageNumber);
-            return View(paging);
+            PaginatedList<Project.Service.Models.VehicleModel> vehicleMakePagedList = await VehicleModelService.VehicleModelPagingAsync(sortOrder, currentFilter, searchString, pageNumber);
+            return View(vehicleMakePagedList);
 
         }
 

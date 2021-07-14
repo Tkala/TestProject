@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Project.Service;
 using Project.Service.Models;
+using Project.Service.NewFolder;
 using Project.Service.Services;
 
 namespace Project.MVC.Controllers
@@ -52,12 +53,41 @@ namespace Project.MVC.Controllers
             ViewData["CurrentFilter"] = searchString;
 
 
-            PaginatedList<VehicleMake> paging = await VehicleMakeService.VehicleMakePagingAsync(sortOrder, currentFilter, searchString, pageNumber);
+            PaginatedList<VehicleMake> vehicleMakePagedList = await VehicleMakeService.VehicleMakePagingAsync(sortOrder, currentFilter, searchString, pageNumber);
 
-            return View(paging);
+            return View(vehicleMakePagedList);
             //return View(await vehicleMake.AsNoTracking().ToListAsync());
         }
+        //    public async Task<ActionResult> IndexAsync(string orderBy, string searchString, string currentFilter, bool ascending = true, int pageNumber = 0, int pageSize = 0)
+        //{
+        //    ViewBag.currentSort = orderBy;
+        //    ViewBag.currentAscending = ascending;
+        //    ViewBag.nameSortParam = "name";
+        //    ViewBag.abrvSortParam = "abrv";
+        //    ViewBag.vehicleMakeSortParam = "vehicleMake";
+        //    ViewBag.ascending = ascending.ToString().ToLower() == "false" ? "true" : "false";
 
+        //    List<ISortingPair> sortingParametersList = new List<ISortingPair>();
+        //    sortingParametersList.Add(SortingPair.CreateSortingPair(ascending, orderBy));
+
+        //    if(searchString != null)
+        //    {
+        //        pageNumber = 1;
+        //    }
+        //    else
+        //    {
+        //        searchString = currentFilter;
+        //    }
+        //    ViewBag.currentFilter = searchString;
+
+        //    IPagingParameters pagingParameters = PagingParameters.CreatePagingParameters(pageNumber, pageSize);
+        //    ISortingParameters sortingParameters = SortingParameters.CreateSortingParameters(sortingParametersList);
+        //    IFilter filter = filter.CreateFilter(searchString);
+
+        //    var vehicleMakes = await Service.GetAsync(pagingParameters, sortingParameters, filter);
+
+        //    return View(vehicleMakes);
+        //}
         //public async Task<IActionResult> Index(string searchString)
         //{
         //    var vehicleMake = from m in _context.VehicleMakes
